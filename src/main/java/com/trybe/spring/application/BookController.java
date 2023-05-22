@@ -15,6 +15,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @Path("/api/books")
@@ -22,10 +23,11 @@ import org.springframework.stereotype.Controller;
 public class BookController {
 
   private List<Book> books = new ArrayList<>();
+
   /**
-     * Método do desafio.
-     * 
-     */
+   * Método do desafio.
+   * 
+   */
 
   @POST
   @Consumes("application/json") // tipo de dado que é consumido
@@ -36,20 +38,24 @@ public class BookController {
   }
 
   /**
-     * Método do desafio.
-     * 
-     */
+   * Método do desafio.
+   * 
+   */
 
   @PUT
+  @Path("/{id}")
   @Consumes("application/json") // tipo de dado que é consumido
   @Produces("application/json") // tipo de dado enviado como resposta
-  public Response update(Book book) {
+  public Response update(@PathParam("id") UUID id, @RequestBody Book book) {
     try {
-      Book boo = books.stream().filter(b -> b.getId().equals(book.getId())).findAny().orElseThrow();
-      boo.setAuthor(book.getAuthor());
-      boo.setName(book.getName());
-      books.add(boo);
-      return Response.ok(book).build();
+      Book bookExistente = books.stream().filter(b -> b.getId().equals(id)).findAny().orElseThrow();
+      if (bookExistente == null) {
+        return Response.status(404).build();
+      }
+      bookExistente.setAuthor(book.getAuthor());
+      bookExistente.setName(book.getName());
+      books.add(bookExistente);
+      return Response.status(200).build();
 
     } catch (NoSuchElementException e) {
       return Response.status(404).build();
@@ -58,9 +64,9 @@ public class BookController {
 
 
   /**
-     * Método do desafio.
-     * 
-     */
+   * Método do desafio.
+   * 
+   */
   @DELETE
   @Path("/{id}")
   @Consumes("application/json")
@@ -69,16 +75,16 @@ public class BookController {
     try {
       Book book = books.stream().filter(b -> b.getId().equals(id)).findAny().orElseThrow();
       books.remove(book);
-      return Response.ok(book).build();
+      return Response.status(200).build();
     } catch (NoSuchElementException e) {
       return Response.status(404).build();
     }
   }
 
   /**
-     * Método do desafio.
-     * 
-     */
+   * Método do desafio.
+   * 
+   */
 
   @GET
   @Consumes("application/json")
@@ -88,9 +94,9 @@ public class BookController {
   }
 
   /**
-     * Método do desafio.
-     * 
-     */
+   * Método do desafio.
+   * 
+   */
 
   @GET
   @Path("/{id}")
