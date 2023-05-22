@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <fileset-config file-format-version="1.2.0" simple-config="false" sync-formatter="false">
-  <local-check-config name="maven-checkstyle-plugin checkstyle" location="jar:file:/home/roni/.m2/repository/com/puppycrawl/tools/checkstyle/8.19/checkstyle-8.19.jar!/google_checks.xml" type="remote" description="maven-checkstyle-plugin configuration checkstyle">
-    <property name="checkstyle.header.file" value="/home/roni/eclipse-workspace/.metadata/.plugins/org.eclipse.core.resources/.projects/acc-java-0x-exercises-api-rest-spring/com.basistech.m2e.code.quality.checkstyleConfigurator/checkstyle-header-checkstyle.txt"/>
+  <local-check-config name="maven-checkstyle-plugin checkstyle" location="jar:file:/home/reinaldo/.m2/repository/com/puppycrawl/tools/checkstyle/8.19/checkstyle-8.19.jar!/google_checks.xml" type="remote" description="maven-checkstyle-plugin configuration checkstyle">
+    <property name="checkstyle.header.file" value="/home/reinaldo/eclipse-workspace/Hello.word/.metadata/.plugins/org.eclipse.core.resources/.projects/spring/com.basistech.m2e.code.quality.checkstyleConfigurator/checkstyle-header-checkstyle.txt"/>
     <property name="checkstyle.cache.file" value="${project_loc}/target/checkstyle-cachefile"/>
   </local-check-config>
   <fileset name="java-sources-checkstyle" enabled="true" check-config-name="maven-checkstyle-plugin checkstyle" local="true">
