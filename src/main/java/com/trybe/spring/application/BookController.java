@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import javax.websocket.server.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
@@ -23,10 +23,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Path("/api/books")
 public class BookController {
   private List<Book> books = new ArrayList<Book>();
-
-  /**
-   * Método classe.
-   */
 
   /**
    * Método classe.
@@ -93,22 +89,23 @@ public class BookController {
    *
    */
 
-  /*
-   * @PUT
-   * 
-   * @Path("/{id}")
-   * 
-   * @Consumes("application/json")
-   * 
-   * @Produces("application/json") public Response update(@PathParam("id") UUID id,@RequestBody Book
-   * updatedBook) { try { Book book = books.stream().filter(b ->
-   * b.getId().equals(id)).findAny().orElseThrow();
-   * 
-   * 
-   * book.setName(updatedBook.getName()); book.setAuthor(updatedBook.getAuthor());
-   * 
-   * 
-   * return Response.ok(book).build(); } catch (NoSuchElementException e) { return
-   * Response.status(404).build(); } }
-   */
+
+  @PUT
+  @Path("/{id}")
+  @Consumes("application/json")
+  @Produces("application/json")
+  public Response update(@PathParam("id") UUID id, @RequestBody Book updatedBook) {
+    try {
+      Book book = books.stream().filter(b -> b.getId().equals(id)).findAny().orElseThrow();
+      System.out.println("update" + books);
+      book.setName(updatedBook.getName());
+      book.setAuthor(updatedBook.getAuthor());
+
+
+      return Response.ok(books.get(0)).build();
+    } catch (NoSuchElementException e) {
+      return Response.status(404).build();
+    }
+  }
+
 }
