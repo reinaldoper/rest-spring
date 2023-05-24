@@ -97,13 +97,13 @@ public class BookController {
 
   @GetMapping
   @RequestMapping("/{id}")
-  public ResponseEntity<Book> findById(@PathVariable("id") UUID id) {
+  public ResponseEntity<String> findById(@PathVariable("id") UUID id) {
     try {
       Book book = books.stream().filter(b -> b.getId().equals(id)).findAny().orElse(null);
       if (book == null) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
       }
-      return ResponseEntity.status(HttpStatus.OK).body(book);
+      return ResponseEntity.status(HttpStatus.OK).body(book.getName());
     } catch (NoSuchElementException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
