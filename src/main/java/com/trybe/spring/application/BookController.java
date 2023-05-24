@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 
 
 @RestController
@@ -30,6 +32,13 @@ public class BookController {
    * Método do desafio.
    * 
    */
+
+  private final RestTemplateBuilder restTemplateBuilder;
+
+  @Autowired
+  public BookController(RestTemplateBuilder restTemplateBuilder) {
+      this.restTemplateBuilder = restTemplateBuilder;
+  }
 
   @GetMapping
   public Response findAll() {
@@ -44,8 +53,7 @@ public class BookController {
   @PostMapping
   public ResponseEntity<String> add(@RequestBody Book book) {
     books.add(book);
-    String author = books.get(books.size() - 1).getAuthor();
-    return ResponseEntity.ok(author);
+    return ResponseEntity.ok(books.get(0).getAuthor());
   }
 
   /**
