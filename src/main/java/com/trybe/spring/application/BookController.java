@@ -6,86 +6,63 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import javax.websocket.server.PathParam;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 
 
-@RestController
-@RequestMapping("/api/books")
+@Controller
+@Path("/api/books")
 public class BookController {
+  private List<Book> books = new ArrayList<Book>();
 
-  private List<Book> books = new ArrayList<>();
-
-  /**
-   * Método do desafio.
-   * 
-   */
-
-  private final RestTemplateBuilder restTemplateBuilder;
-
-  @Autowired
-  public BookController(RestTemplateBuilder restTemplateBuilder) {
-      this.restTemplateBuilder = restTemplateBuilder;
+  @POST
+  @Consumes("application/json")
+  @Produces("application/json")
+  public Response add(@RequestBody Book book) {
+    books.add(book);
+    return Response.ok(book).build();
   }
 
-  @GetMapping
+  @GET
+  @Consumes("application/json")
+  @Produces("application/json")
   public Response findAll() {
     return Response.ok(books).build();
   }
 
   /**
-   * Método do desafio.
-   * 
+   * Rota /id.
    */
 
-  @PostMapping
-  public ResponseEntity<String> add(@RequestBody Book book) {
-    books.add(book);
-    return ResponseEntity.ok(books.get(0).getAuthor());
-  }
-
-  /**
-   * Método do desafio.
-   * 
-   */
-
-  @PutMapping
-  @RequestMapping("/{id}")
-  public Response update(@PathParam("id") UUID id, @RequestBody Book book) {
+  @GET
+  @Path("/{id}")
+  @Consumes("application/json")
+  @Produces("application/json")
+  public Response findById(@PathParam("id") UUID id) {
     try {
-      Book bookExistente = books.stream().filter(b -> b.getId().equals(id)).findAny().orElseThrow();
-      if (bookExistente == null) {
-        return Response.status(404).build();
-      }
-      bookExistente.setAuthor(book.getAuthor());
-      bookExistente.setName(book.getName());
-      books.add(bookExistente);
-      return Response.ok(books.get(0)).build();
-
+      Book book = books.stream().filter(b -> b.getId().equals(id)).findAny().orElseThrow();
+      return Response.ok(book).build();
     } catch (NoSuchElementException e) {
       return Response.status(404).build();
     }
   }
 
-
   /**
-   * Método do desafio.
-   * 
+   * Método remove.
+   *
    */
-  @DeleteMapping
-  @RequestMapping("/{id}")
+
+  @DELETE
+  @Path("/{id}")
   public Response remove(@PathParam("id") UUID id) {
     try {
       Book book = books.stream().filter(b -> b.getId().equals(id)).findAny().orElseThrow();
@@ -100,21 +77,26 @@ public class BookController {
   }
 
   /**
-   * Método do desafio.
-   * 
+   * Método remove.
+   *
    */
 
-  @GetMapping
-  @RequestMapping("/{id}")
-  public ResponseEntity<String> findById(@PathVariable("id") UUID id) {
+  /* @PUT
+  @Consumes("application/json")
+  @Produces("application/json")
+  public Response update(@PathParam("id") UUID id, @RequestBody Book book) {
     try {
-      Book book = books.stream().filter(b -> b.getId().equals(id)).findAny().orElse(null);
-      if (book == null) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+      Book bookExistente = books.stream().filter(b -> b.getName().equals(book.getName()))
+          .findAny().orElseThrow();
+      if (bookExistente == null) {
+        return Response.status(404).build();
       }
-      return ResponseEntity.status(HttpStatus.OK).body(book.getName());
+      bookExistente.setAuthor(book.getAuthor());
+      bookExistente.setName(book.getName());
+      books.add(bookExistente);
+      return Response.ok(books.get(0)).build();
     } catch (NoSuchElementException e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+      return Response.status(404).build();
     }
-  }
+  } */
 }
