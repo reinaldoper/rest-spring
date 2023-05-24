@@ -6,21 +6,18 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import javax.websocket.server.PathParam;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
-@Controller
-@Path("/api/books")
+@RestController
+@RequestMapping("/api/books")
 public class BookController {
 
   private List<Book> books = new ArrayList<>();
@@ -30,9 +27,7 @@ public class BookController {
    * 
    */
 
-  @GET
-  @Consumes("application/json")
-  @Produces("application/json")
+  @GetMapping
   public Response findAll() {
     return Response.ok(books).build();
   }
@@ -42,10 +37,7 @@ public class BookController {
    * 
    */
 
-  @POST
-  @ResponseBody
-  @Consumes("application/json") // tipo de dado que é consumido
-  @Produces("application/json") // tipo de dado enviado como resposta
+  @PostMapping
   public Response add(@RequestBody Book book) {
     books.add(book);
     return Response.ok(books.get(0).getAuthor()).build();
@@ -56,11 +48,8 @@ public class BookController {
    * 
    */
 
-  @PUT
-  @ResponseBody
-  @Path("/{id}")
-  @Consumes("application/json") // tipo de dado que é consumido
-  @Produces("application/json") // tipo de dado enviado como resposta
+  @PutMapping
+  @RequestMapping("/{id}")
   public Response update(@PathParam("id") UUID id, @RequestBody Book book) {
     try {
       Book bookExistente = books.stream().filter(b -> b.getId().equals(id)).findAny().orElseThrow();
@@ -82,10 +71,8 @@ public class BookController {
    * Método do desafio.
    * 
    */
-  @DELETE
-  @Path("/{id}")
-  @Consumes("application/json")
-  @Produces("application/json")
+  @DeleteMapping
+  @RequestMapping("/{id}")
   public Response remove(@PathParam("id") UUID id) {
     try {
       Book book = books.stream().filter(b -> b.getId().equals(id)).findAny().orElseThrow();
@@ -104,10 +91,8 @@ public class BookController {
    * 
    */
 
-  @GET
-  @Path("/{id}")
-  @Consumes("application/json")
-  @Produces("application/json")
+  @GetMapping
+  @RequestMapping("/{id}")
   public Response findById(@PathParam("id") UUID id) {
     try {
       Book book = books.stream().filter(b -> b.getId().equals(id)).findAny().orElseThrow();
