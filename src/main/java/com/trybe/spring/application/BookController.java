@@ -42,9 +42,10 @@ public class BookController {
    */
 
   @PostMapping
-  public Response add(@RequestBody Book book) {
+  public ResponseEntity<String> add(@RequestBody Book book) {
     books.add(book);
-    return Response.ok(books.get(0).getAuthor()).build();
+    String author = books.get(books.size() - 1).getAuthor();
+    return ResponseEntity.ok(author);
   }
 
   /**
