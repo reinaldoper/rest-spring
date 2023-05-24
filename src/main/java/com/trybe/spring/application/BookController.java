@@ -99,7 +99,7 @@ public class BookController {
       if (book == null) {
         return Response.status(404).build();
       }
-      return Response.ok(book.getName()).build();
+      return Response.status(200).build();
     } catch (NoSuchElementException e) {
       return Response.status(404).build();
     }
