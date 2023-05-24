@@ -74,6 +74,7 @@ public class Book {
    * Método classe.
    */
 
+
   public void setAuthor(String author) {
     this.author = author;
   }
@@ -92,4 +93,10 @@ public class Book {
     Book other = (Book) obj;
     return Objects.equals(name, other.name);
   }
+
+  @Override
+  public String toString() {
+    return "Book [name=" + name + "]";
+  }
+
 }

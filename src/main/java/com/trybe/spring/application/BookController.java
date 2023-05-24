@@ -24,6 +24,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class BookController {
   private List<Book> books = new ArrayList<Book>();
 
+  /**
+   * Método classe.
+   */
+
+  /**
+   * Método classe.
+   */
+
   @POST
   @Consumes("application/json")
   @Produces("application/json")
@@ -31,6 +39,10 @@ public class BookController {
     books.add(book);
     return Response.ok(book).build();
   }
+
+  /**
+   * Método classe.
+   */
 
   @GET
   @Consumes("application/json")
@@ -40,7 +52,7 @@ public class BookController {
   }
 
   /**
-   * Rota /id.
+   * Método classe.
    */
 
   @GET
@@ -57,18 +69,18 @@ public class BookController {
   }
 
   /**
-   * Método remove.
+   * Método classe.
    *
    */
 
   @DELETE
   @Path("/{id}")
+  @Consumes("application/json")
+  @Produces("application/json")
   public Response remove(@PathParam("id") UUID id) {
     try {
       Book book = books.stream().filter(b -> b.getId().equals(id)).findAny().orElseThrow();
-      if (book == null) {
-        return Response.status(404).build();
-      }
+      System.out.println(book);
       books.remove(book);
       return Response.ok(books.size()).build();
     } catch (NoSuchElementException e) {
@@ -81,22 +93,22 @@ public class BookController {
    *
    */
 
-  /* @PUT
-  @Consumes("application/json")
-  @Produces("application/json")
-  public Response update(@PathParam("id") UUID id, @RequestBody Book book) {
-    try {
-      Book bookExistente = books.stream().filter(b -> b.getName().equals(book.getName()))
-          .findAny().orElseThrow();
-      if (bookExistente == null) {
-        return Response.status(404).build();
-      }
-      bookExistente.setAuthor(book.getAuthor());
-      bookExistente.setName(book.getName());
-      books.add(bookExistente);
-      return Response.ok(books.get(0)).build();
-    } catch (NoSuchElementException e) {
-      return Response.status(404).build();
-    }
-  } */
+  /*
+   * @PUT
+   * 
+   * @Path("/{id}")
+   * 
+   * @Consumes("application/json")
+   * 
+   * @Produces("application/json") public Response update(@PathParam("id") UUID id,@RequestBody Book
+   * updatedBook) { try { Book book = books.stream().filter(b ->
+   * b.getId().equals(id)).findAny().orElseThrow();
+   * 
+   * 
+   * book.setName(updatedBook.getName()); book.setAuthor(updatedBook.getAuthor());
+   * 
+   * 
+   * return Response.ok(book).build(); } catch (NoSuchElementException e) { return
+   * Response.status(404).build(); } }
+   */
 }
