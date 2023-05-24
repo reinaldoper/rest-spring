@@ -13,6 +13,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import org.springframework.stereotype.Controller;
@@ -43,7 +44,10 @@ public class BookController {
   @GET
   @Consumes("application/json")
   @Produces("application/json")
-  public Response findAll() {
+  public Response findAll(@QueryParam("filter") String filter) {
+    if (filter != null) {
+      return Response.ok(books.stream().filter(b -> b.getName().contains(filter))).build();
+    }
     return Response.ok(books).build();
   }
 
@@ -76,7 +80,6 @@ public class BookController {
   public Response remove(@PathParam("id") UUID id) {
     try {
       Book book = books.stream().filter(b -> b.getId().equals(id)).findAny().orElseThrow();
-      System.out.println(book);
       books.remove(book);
       return Response.ok(books.size()).build();
     } catch (NoSuchElementException e) {
@@ -97,12 +100,11 @@ public class BookController {
   public Response update(@PathParam("id") UUID id, @RequestBody Book updatedBook) {
     try {
       Book book = books.stream().filter(b -> b.getId().equals(id)).findAny().orElseThrow();
-      System.out.println("update" + books);
       book.setName(updatedBook.getName());
       book.setAuthor(updatedBook.getAuthor());
 
 
-      return Response.ok(books.get(0)).build();
+      return Response.ok(book).build();
     } catch (NoSuchElementException e) {
       return Response.status(404).build();
     }
